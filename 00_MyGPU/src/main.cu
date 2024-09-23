@@ -20,23 +20,27 @@ int main()
 	// Get the ID of the currently selected active CUDA device
 	int device;
 	cudaGetDevice(&device);
-
+	
 	// Fetch its properties
 	cudaDeviceProp props;
-	cudaGetDeviceProperties(&props, device);
 
-	/* 
-	We only print the most fundamental properties here. cudaDeviceProp 
-	contains a long range of indicators to check for different things
-	that your GPU may or may not support, as well as factors for 
-	performance. However, the most essential property to know about is
-	the compute capability of the device. 
-	*/
-	std::cout << "Model: " << props.name << std::endl;
-	std::cout << "Compute capability: " << props.major << "." << props.minor << std::endl;
-	std::cout << "Memory: " << props.totalGlobalMem / float(1 << 30) << " GiB" << std::endl;
-	std::cout << "Multiprocessors: " << props.multiProcessorCount << std::endl;
-	std::cout << "Clock rate: " << props.clockRate / float(1'000'000) << " GHz" << std::endl;
+	for (int device_id = device; device_id < device + numDevices; device_id++){
+		cudaGetDeviceProperties(&props, device_id);
+
+		/* 
+		We only print the most fundamental properties here. cudaDeviceProp 
+		contains a long range of indicators to check for different things
+		that your GPU may or may not support, as well as factors for 
+		performance. However, the most essential property to know about is
+		the compute capability of the device. 
+		*/
+		std::cout << std::endl << "DEVICE ID" << std::endl;
+		std::cout << "Model: " << props.name << std::endl;
+		std::cout << "Compute capability: " << props.major << "." << props.minor << std::endl;
+		std::cout << "Memory: " << props.totalGlobalMem / float(1 << 30) << " GiB" << std::endl;
+		std::cout << "Multiprocessors: " << props.multiProcessorCount << std::endl;
+		std::cout << "Clock rate: " << props.clockRate / float(1'000'000) << " GHz" << std::endl;
+	}
 
 	return 0;
 }

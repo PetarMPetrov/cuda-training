@@ -7,6 +7,11 @@ __global__ void HelloGPU()
 	printf("Hello from the GPU!\n");
 }
 
+__global__ void ByeGPU()
+{
+	printf("Good Bye, Host\n");
+}
+
 int main()
 {
 	std::cout << "==== Sample 01 - Hello GPU ====\n" << std::endl;
@@ -14,6 +19,7 @@ int main()
 
 	// Launch a kernel with 1 block that has 12 threads
 	HelloGPU<<<1, 12>>>();
+	ByeGPU<<<2, 6>>>();
 
 	/*
 	 Synchronize with GPU to wait for printf to finish.

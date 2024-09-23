@@ -26,6 +26,11 @@ __global__ void RunGPU(float x)
     printf("%f\n", SquareAnywhere(x));
 }
 
+__host__ __device__ const char* PrintAnywhere(const char* a)
+{
+    return a;
+}
+
 /*
  Call host and portable functions from a kernel
  Note that, by default, if a function has no architecture
@@ -35,6 +40,16 @@ void RunCPU(float x)
 {
     HostOnly();
     std::cout << SquareAnywhere(x) << std::endl;
+}
+
+__global__ void PrintGPU()
+{
+    PrintAnywhere("print in gpu");
+}
+
+void PrintCPU()
+{
+    PrintAnywhere("print in cpu");
 }
 
 int main()
@@ -50,6 +65,8 @@ int main()
 
     RunCPU(42);
     RunGPU<<<1, 1>>>(42);
+    PrintCPU();
+    PrintGPU<<<2,2>>>();
     cudaDeviceSynchronize();
     return 0;
 }
